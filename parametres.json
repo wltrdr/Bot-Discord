@@ -1,0 +1,13 @@
+{
+    "NombrePonctuationsMax" : 3,
+    "probabiliteReponseMP" : 1,
+    "probabiliteReponseHumain" : 0.2,
+    "probabiliteReponseBot" : 0.1,
+    "TempsDeReponseMinSecondes" : 2,
+    "TempsDeReponseMaxSecondes" : 60,
+    "DelaiMinEntreActivitesMinutes" : 6,
+    "DelaiMaxEntreActivitesMinutes" : 600,
+    "DelaiMinEntreMessagesInactifHeures" : 12,
+    "DelaiMaxEntreMessagesInactifHeures" : 72,
+    "SecondesInterval" : 25
+}

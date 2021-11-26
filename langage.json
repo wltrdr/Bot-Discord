@@ -1,0 +1,93 @@
+{
+    "Jeux" : [
+        "Nom du jeu 1",
+        "Nom du jeu 2",
+        "Nom du jeu 3"
+    ],
+    "Films" : [
+        "Nom du film/série/site 1",
+        "Nom du film/série/site 2",
+        "Nom du film/série/site 3"
+    ],
+    "ReponsesInactif" : [
+        "Message public quand le serveur est inactif trop longtemps 1",
+        "Message public quand le serveur est inactif trop longtemps 2",
+        "Message public quand le serveur est inactif trop longtemps 3"
+    ],
+    "ReponsesPrive" : [
+        "Réponse à un message privé 1",
+        "Réponse à un message privé 2",
+        "Réponse à un message privé 3"
+    ],
+    "ReponsesBots" : [
+        "Réponse à un message public posté par un bot 1",
+        "Réponse à un message public posté par un bot 2",
+        "Réponse à un message public posté par un bot 3"
+    ],
+    "ReponsesHumains" : [
+        "Réponse à un message public posté par un humain 1",
+        "Réponse à un message public posté par un humain 2",
+        "Réponse à un message public posté par un humain 3"
+    ],
+    "ReponsesTous" : [
+        "Réponse à un message privé ou public posté par un humain ou un bot 1",
+        "Réponse à un message privé ou public posté par un humain ou un bot 2",
+        "Réponse à un message privé ou public posté par un humain ou un bot 3"
+    ],
+    "ReponsesThemes" : [
+        {
+            "Theme" : "Nom-Du-Theme-1",
+            "probabiliteReponse" : 1,
+            "Reponses" : [
+                "Réponse à un message qui parle de 'Nom-Du-Theme 1' 1",
+                "Réponse à un message qui parle de 'Nom-Du-Theme 1' 2",
+                "Réponse à un message qui parle de 'Nom-Du-Theme 1' 3"
+            ]
+        },
+        {
+            "Theme" : "Nom-Du-Theme-2",
+            "probabiliteReponse" : 0.5,
+            "Reponses" : [
+                "Réponse à un message qui parle de 'Nom-Du-Theme 2' 1",
+                "Réponse à un message qui parle de 'Nom-Du-Theme 2' 2",
+                "Réponse à un message qui parle de 'Nom-Du-Theme 2' 3"
+            ]
+        }
+    ],
+    "Declencheurs" : [
+        {
+            "Nom" : "Mot Clef Declencheur 1",
+            "Themes" : [
+                "Nom-Du-Theme-1"
+            ],
+            "Regex" : [
+                ["Mot Cl.f? Declencheur 1", "mi"],
+                ["Mot Declencheur 1", "mi"],
+                ["Declencheur [a-z]+ 1", "mi"]
+            ]
+        },
+        {
+            "Nom" : "Mot Clef Declencheur 2",
+            "Themes" : [
+                "Nom-Du-Theme-2"
+            ],
+            "Regex" : [
+                ["Mot Cl.f? Declencheur 2", "mi"],
+                ["Mot Declencheur 2", "mi"],
+                ["Declencheur [a-z]+ 2", "mi"]
+            ]
+        },
+        {
+            "Nom" : "Mot Clef Declencheur 3",
+            "Themes" : [
+                "Nom-Du-Theme-1",
+                "Nom-Du-Theme-2"
+            ],
+            "Regex" : [
+                ["Mot Cl.f? Declencheur 3", "mi"],
+                ["Mot Declencheur 3", "mi"],
+                ["Declencheur [a-z]+ 3", "mi"]
+            ]
+        }
+    ]
+}
