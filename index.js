@@ -361,7 +361,11 @@ bot.on("messageCreate", message => {
         const rgxMsgRenvoiTousMPs = new RegExp(`Fais.moi suivre tous tes messages`, "i")
         const rgxMsgEnvoiMP = new RegExp(`Envoie[^"]+"(.+)"[^"]+"(.+)"$`, "i")
         if(message.guildId == null && (rgxMsgCmtAider.test(message.content) || rgxMsgQuePeuxDire.test(message.content)))
-            repondMessageBot(message, `Je peux te dire :\n\n- Sur quels serveurs je suis connecté\n- Qui je connais\n\nSinon je peux aussi :\n\n- Te faire suivre mes messages\n- Envoyer à "une personne" un "message"`, `vient d'envoyer ce qu'il peut faire pour lui à ${message.author.username}`)
+            repondMessageBot(
+                message,
+                `Je peux te dire :\n\n- Sur quels serveurs je suis connecté\n- Qui je connais\n\nSinon je peux aussi :\n\n- Te faire suivre mes messages\n- Envoyer à "une personne" un "message"`,
+                `vient d'envoyer ce qu'il peut faire pour lui à ${message.author.username}`
+            )
         else if(message.guildId == null && rgxMsgServeursConnecte.test(message.content))
         {
             let msg = `Je suis connecté sur ces serveurs :\n\n`
