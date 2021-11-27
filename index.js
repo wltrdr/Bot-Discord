@@ -193,17 +193,22 @@ function refreshListes()
             members.forEach(member =>
             {
                 let membreTrouve = false
-                let membreBisTrouve = false
-                listeMembres.forEach(membre => {
-                    if(membre.id === member.user.id && membre.nom === member.user.username)
+                listeMembres.forEach((membre, i) => {
+                    if(membre.id === member.user.id)
+                    {
+                        if(membre.nom !== member.user.username)
+                            listeMembres[i].nom = member.user.username
+                        if(member.nickname != null && !membre.surnoms.includes(member.nickname))
+                            listeMembres[i].surnoms.push(member.nickname)
                         membreTrouve = true
-                    if(membre.id === member.user.id && member.nickname != null && membre.nom === member.nickname)
-                        membreBisTrouve = true
+                    }
                 })
                 if(!membreTrouve)
-                    listeMembres.push({id: member.user.id, nom: member.user.username})
-                if(!membreBisTrouve && member.nickname != null)
-                    listeMembres.push({id: member.user.id, nom: member.nickname})
+                {
+                    listeMembres.push({id: member.user.id, nom: member.user.username, surnoms: []})
+                    if(member.nickname != null)
+                        listeMembres[listeMembres.length - 1].surnoms.push(member.nickname)
+                }
             })
         })
     })
@@ -356,7 +361,7 @@ bot.on("messageCreate", message => {
         const rgxMsgRenvoiTousMPs = new RegExp(`Fais.moi suivre tous tes messages`, "i")
         const rgxMsgEnvoiMP = new RegExp(`Envoie[^"]+"(.+)"[^"]+"(.+)"$`, "i")
         if(message.guildId == null && (rgxMsgCmtAider.test(message.content) || rgxMsgQuePeuxDire.test(message.content)))
-            repondMessageBot(message, `Je peux te dire :\n\n- Sur quels serveurs je suis connecté\n- Qui je connais\n\nSinon je peux aussi :\n\n- Te faire suivre mes messages\n- Envoyer à "un membre" un "message"`, `vient d'envoyer ce qu'il peut faire pour lui à ${message.author.username}`)
+            repondMessageBot(message, `Je peux te dire :\n\n- Sur quels serveurs je suis connecté\n- Qui je connais\n\nSinon je peux aussi :\n\n- Te faire suivre mes messages\n- Envoyer à "une personne" un "message"`, `vient d'envoyer ce qu'il peut faire pour lui à ${message.author.username}`)
         else if(message.guildId == null && rgxMsgServeursConnecte.test(message.content))
         {
             let msg = `Je suis connecté sur ces serveurs :\n\n`
@@ -372,7 +377,13 @@ bot.on("messageCreate", message => {
             msg[0] = `Je connais ces personnes :\n\n`
             listeMembres.forEach(membre =>
             {
-                let txtMsg = `- ${membre.nom} (id : "${membre.id}")\n`
+                let txtMsg = `- ${membre.nom}`
+                if(membre.surnoms.length !== 0)
+                {
+                    txtMsg += ` se faisant appeler également `
+                    txtMsg += membre.surnoms.join(" ou ")
+                }
+                txtMsg += ` (id : "${membre.id}")\n`
                 if(msg[nbMsg].length + txtMsg.length > 1950)
                 {
                     msg[nbMsg] += "...\n"
@@ -383,7 +394,7 @@ bot.on("messageCreate", message => {
                     msg[nbMsg] += txtMsg
             })
             msg.forEach((partMsg, i) => {
-                repondMessageBot(message, partMsg, `vient d'envoyer la partie ${i + 1}/${msg.length} de la liste des personne qu'il connait à ${message.author.username}`)
+                repondMessageBot(message, partMsg, `vient d'envoyer la partie ${i + 1}/${msg.length} de la liste des personnes qu'il connait à ${message.author.username}`)
             })
         }
         else if(message.guildId == null && (rgxMsgRenvoiMPs.test(message.content) || rgxMsgRenvoiTousMPs.test(message.content)))
@@ -398,34 +409,59 @@ bot.on("messageCreate", message => {
         }
         else if(message.guildId == null && rgxMsgEnvoiMP.test(message.content))
         {
+            let nomDestinataire
+            const idDestinataire = []
+            const rgxNb = new RegExp("^[0-9]+$")
             const matches = message.content.match(rgxMsgEnvoiMP)
-                let idDestinataire = false
-                let nomDestinataire
-                const rgxNb = new RegExp("^[0-9]+$")
-                if(rgxNb.test(matches[1]))
+            if(rgxNb.test(matches[1]))
+            {
+                nomDestinataire = returnObjInArr(listeMembres, matches[1]).nom
+                if(nomDestinataire)
+                    idDestinataire.push(matches[1])
+            }
+            else
+            {
+                nomDestinataire = matches[1]
+                listeMembres.forEach(membre => {
+                    const nomEtSurnoms = membre.surnoms.map(x => x)
+                    nomEtSurnoms.push(membre.nom)
+                    nomEtSurnoms.forEach(nom => {
+                        if(nom.toLowerCase() === nomDestinataire.toLowerCase())
+                            idDestinataire.push(membre.id)
+                    })
+                })
+            }
+            if(idDestinataire.length !== 0)
+            {
+                if(idDestinataire.length !== 1)
                 {
-                    nomDestinataire = returnObjInArr(listeMembres, matches[1]).nom
-                    if(nomDestinataire)
-                        idDestinataire = matches[1]
+                    let msg = `Je connais plusieurs personnes avec ce nom :\n\n`
+                    idDestinataire.forEach(id => {
+                        const infosDestinataire = returnObjInArr(listeMembres, id)
+                        msg += `- ${infosDestinataire.nom}`
+                        if(infosDestinataire.surnoms.length !== 0)
+                        {
+                            msg += ` se faisant appeler également `
+                            msg += infosDestinataire.surnoms.join(" ou ")
+                        }
+                        msg += ` (id : "${id}")\n`
+                    })
+                    repondMessageBot(message, msg, `a envoyé un message privé à ${nomDestinataire} venant de ${message.author.username}`)
                 }
                 else
                 {
-                    nomDestinataire = matches[1]
-                    idDestinataire = returnObjInArr(listeMembres, matches[1], "nom", true).id
-                }
-                if(idDestinataire)
-                {
                     try {
-                        bot.users.cache.get(idDestinataire).send(matches[2])
+                        bot.users.cache.get(idDestinataire[0]).send(matches[2])
                         repondMessageBot(message, `Ok j'envoie ce message !`, `a envoyé un message privé à ${nomDestinataire} venant de ${message.author.username}`)
                     }
                     catch {
-                        removeObjsInArr(listeMembres, idDestinataire)
+                        removeObjsInArr(listeMembres, idDestinataire[0])
                         repondMessageBot(message, `Je n'ai pas réussi à envoyer ce message !`, `n'a pas réussi à envoyer à ${nomDestinataire} le message privé venant de ${message.author.username}`)
                     }
                 }
-                else
-                    repondMessageBot(message, `Je n'ai pas compris à qui tu voulais envoyer ce message !`, `n'a pas compris à qui envoyer le message privé venant de ${message.author.username}`)
+            }
+            else
+                repondMessageBot(message, `Je n'ai pas compris à qui tu voulais envoyer ce message !`, `n'a pas compris à qui envoyer le message privé venant de ${message.author.username}`)
         }
         else
         {
