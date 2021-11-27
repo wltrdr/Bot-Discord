@@ -353,13 +353,13 @@ function repondMessage(message, type, listeReponses, txtConsole, probabilite)
 bot.on("messageCreate", message => {
     if(message.author.constructor.name != "ClientUser")
     {
-        const rgxMsgCmtAider = new RegExp(`Comment peux.tu m.?aider ?\?`, "i")
-        const rgxMsgQuePeuxDire = new RegExp(`Que peux.tu me dire ?\?`, "i")
-        const rgxMsgServeursConnecte = new RegExp(`Sur quels serveurs es.?tu connect. ?\?`, "i")
-        const rgxMsgQuiConnaistu = new RegExp(`Qui connais.tu ?\?`, "i")
+        const rgxMsgCmtAider = new RegExp(`Comment peux.tu m.?aider`, "i")
+        const rgxMsgQuePeuxDire = new RegExp(`Que peux.tu me dire`, "i")
+        const rgxMsgServeursConnecte = new RegExp(`Sur quels serveurs es.?tu connect.`, "i")
+        const rgxMsgQuiConnaistu = new RegExp(`Qui connais.tu`, "i")
         const rgxMsgRenvoiMPs = new RegExp(`Fais.moi suivre tes messages`, "i")
         const rgxMsgRenvoiTousMPs = new RegExp(`Fais.moi suivre tous tes messages`, "i")
-        const rgxMsgEnvoiMP = new RegExp(`Envoie[^"]+"(.+)"[^"]+"(.+)"$`, "i")
+        const rgxMsgEnvoiMP = new RegExp(`Envoie[^"]+"(.+)"[^"]+"(.+)"[^"]*$`, "i")
         if(message.guildId == null && (rgxMsgCmtAider.test(message.content) || rgxMsgQuePeuxDire.test(message.content)))
             repondMessageBot(
                 message,
