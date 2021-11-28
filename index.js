@@ -78,9 +78,7 @@ function returnObjInArr(arr, val, param = false, insensible = false, returnBoole
         let retTmp = true
         if(returnBoolean === false)
             retTmp = el
-        if(insensible === true && el[param].toLowerCase() === val)
-            ret = retTmp
-        else if(insensible !== true && el[param] === val)
+        if((insensible === true && el[param].toLowerCase() === val) || (insensible !== true && el[param] === val))
             ret = retTmp
     })
     return ret
@@ -94,12 +92,7 @@ function removeObjsInArr(arr, val, param = false, insensible = false)
         val = val.toLowerCase()
     for(let i = 0; i < arr.length; i++)
     {
-        if(insensible === true && arr[i][param].toLowerCase() === val)
-        {
-            arr.splice(i, 1)
-            i--
-        }
-        else if(insensible !== true && arr[i][param] === val)
+        if((insensible === true && arr[i][param].toLowerCase() === val) || (insensible !== true && arr[i][param] === val))
         {
             arr.splice(i, 1)
             i--
